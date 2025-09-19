@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Aluno.Lab6\\RiderProjects\\Aprenda.Backend\\Aprenda.Backend\\Aprenda.Backend.csproj": {}
+    "/home/matheusn/dev/faculdade/2025-2/tp3/Aprenda.Backend/Aprenda.Backend/Aprenda.Backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Aluno.Lab6\\RiderProjects\\Aprenda.Backend\\Aprenda.Backend\\Aprenda.Backend.csproj": {
+    "/home/matheusn/dev/faculdade/2025-2/tp3/Aprenda.Backend/Aprenda.Backend/Aprenda.Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Aluno.Lab6\\RiderProjects\\Aprenda.Backend\\Aprenda.Backend\\Aprenda.Backend.csproj",
+        "projectUniqueName": "/home/matheusn/dev/faculdade/2025-2/tp3/Aprenda.Backend/Aprenda.Backend/Aprenda.Backend.csproj",
         "projectName": "Aprenda.Backend",
-        "projectPath": "C:\\Users\\Aluno.Lab6\\RiderProjects\\Aprenda.Backend\\Aprenda.Backend\\Aprenda.Backend.csproj",
-        "packagesPath": "C:\\Users\\Aluno.Lab6\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Aluno.Lab6\\RiderProjects\\Aprenda.Backend\\Aprenda.Backend\\obj\\",
+        "projectPath": "/home/matheusn/dev/faculdade/2025-2/tp3/Aprenda.Backend/Aprenda.Backend/Aprenda.Backend.csproj",
+        "packagesPath": "/home/matheusn/.nuget/packages/",
+        "outputPath": "/home/matheusn/dev/faculdade/2025-2/tp3/Aprenda.Backend/Aprenda.Backend/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Aluno.Lab6\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/home/matheusn/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -37,7 +37,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -71,7 +72,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\Aluno.Lab6\\.dotnet\\sdk\\8.0.414/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/home/matheusn/.dotnet/sdk/9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
