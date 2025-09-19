@@ -1,0 +1,6 @@
+@Aprenda.Backend_HostAddress = http://localhost:5183
+
+GET {{Aprenda.Backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
