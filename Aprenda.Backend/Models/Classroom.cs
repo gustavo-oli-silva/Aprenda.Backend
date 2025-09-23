@@ -8,7 +8,7 @@ public class Classroom
     public long Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 
