@@ -8,4 +8,6 @@ public class Grade
     public double Value { get; set; }
     public string Feedback { get; set; }
     public DateTime GradedAt { get; set; }
+
+    public virtual Submission Submission { get; set; }
 }
