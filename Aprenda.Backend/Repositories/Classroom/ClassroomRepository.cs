@@ -43,5 +43,16 @@ public class ClassroomRepository : IClassroomRepository
             _dbContext.Classrooms.Remove(classroom);
             await _dbContext.SaveChangesAsync();
         }
-    }   
+    }
+
+    public async Task AssignUserToClassroom(Models.Classroom classroom, Models.User user)
+    {
+        classroom.Users.Add(user);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public Task<Models.Classroom?> GetClassroomWithUsersAsync(long id)
+    {
+        return _dbContext.Classrooms.Include(c => c.Users).FirstOrDefaultAsync(c => c.Id == id);
+    }
 }

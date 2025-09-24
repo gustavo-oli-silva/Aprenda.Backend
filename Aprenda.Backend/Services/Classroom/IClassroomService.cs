@@ -10,4 +10,10 @@ public interface IClassroomService
     Task<Dtos.Classroom.ClassroomDto> CreateClassroomAsync(Dtos.Classroom.CreateClassroomDto classroom);
     Task UpdateClassroomAsync(long id, Dtos.Classroom.CreateClassroomDto classroom);
     Task DeleteClassroomAsync(long id);
+
+    Task AssignUserToClassroom(long classroomId, long userId);
+
+    Task<IEnumerable<Dtos.User.UserDto>> GetClassroomWithStudentsAsync(long id);
+
+    Task<IEnumerable<Dtos.User.UserDto>> GetClassroomWithProfessorsAsync(long id);
 }

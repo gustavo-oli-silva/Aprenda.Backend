@@ -30,6 +30,25 @@ namespace Aprenda.Backend.Controllers
             return Ok(classroom);
         }
 
+        [HttpPost("{classroomId}/users/{userId}")]
+        public async Task<IActionResult> AssignUser(long classroomId, long userId)
+        {
+            await _classroomService.AssignUserToClassroom(classroomId, userId);
+            return NoContent();
+        }
+
+        [HttpPost("{classroomId}/students")]
+        public async Task<IActionResult> GetStudents(long classroomId)
+        {
+            var students = await _classroomService.GetClassroomWithStudentsAsync(classroomId);
+            return Ok(students);
+        }
+        [HttpPost("{classroomId}/professors")]
+        public async Task<IActionResult> GetProfessors(long classroomId)
+        {
+            var professors = await _classroomService.GetClassroomWithProfessorsAsync(classroomId);
+            return Ok(professors);
+        }
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Dtos.Classroom.CreateClassroomDto createDto)
         {
@@ -43,12 +62,14 @@ namespace Aprenda.Backend.Controllers
             await _classroomService.UpdateClassroomAsync(id, updateDto);
             return NoContent();
         }
-        
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
             await _classroomService.DeleteClassroomAsync(id);
             return NoContent();
         }
+
+
     }
 }

@@ -9,4 +9,8 @@ public interface IClassroomRepository
     Task AddAsync(Models.Classroom classroom);
     Task UpdateAsync(Models.Classroom classroom);
     Task DeleteAsync(long id);
+
+    Task AssignUserToClassroom(Models.Classroom classroom, Models.User user);
+
+    Task <Models.Classroom> GetClassroomWithUsersAsync(long id);
 }
