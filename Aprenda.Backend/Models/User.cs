@@ -18,7 +18,7 @@ public class User
     public EProfile Profile { get; set; }
 
     public long? AvatarId { get; set; }
-    public virtual Archive Avatar { get; set; }
+    public virtual Archive? Avatar { get; set; }
 
     public virtual ICollection<Submission> Submissions { get; set; } = new List<Submission>();
     public virtual ICollection<Post> Posts { get; set; } = new List<Post>();

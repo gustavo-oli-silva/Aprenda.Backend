@@ -1,0 +1,46 @@
+using System;
+using Aprenda.Backend.Dtos.Classroom;
+using Aprenda.Backend.Dtos.User;
+
+namespace Aprenda.Backend.Mappers.User;
+
+public static class UserMapper
+{
+    public static UserDto ToDto(this Models.User user) =>
+        new UserDto(
+            user.Id,
+            user.Name,
+            user.Email,
+            user.Profile,
+            user.Avatar?.FilePath ?? string.Empty,
+            user.CreatedAt
+        );
+
+
+#pragma warning disable CS8601 // Possible null reference assignment.
+    public static Models.User ToDomain(this CreateUserDto createDto) =>
+        new Models.User
+        {
+            Name = createDto.Name,
+            Email = createDto.Email,
+            Password = createDto.Password,
+            Profile = createDto.Profile,
+            CreatedAt = DateTime.UtcNow,
+            Avatar = string.IsNullOrEmpty(createDto.AvatarUrl) ? null : new Models.Archive
+            {
+                FilePath = createDto.AvatarUrl,
+                FileName = Path.GetFileName(createDto.AvatarUrl) 
+            }
+        };
+#pragma warning restore CS8601 // Possible null reference assignment.
+
+
+    public static Models.Classroom ToDomain(this CreateClassroomDto createDto) =>
+        new Models.Classroom
+        {
+            Name = createDto.Name,
+            Description = createDto.Description,
+            CreatedAt = DateTime.UtcNow
+        };
+
+    }
