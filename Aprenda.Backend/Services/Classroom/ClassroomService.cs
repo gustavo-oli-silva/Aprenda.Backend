@@ -21,10 +21,9 @@ public class ClassroomService : IClassroomService
         return classroomEntity.ToDto();
     }
 
-    public async Task<bool> DeleteClassroomAsync(long id)
+    public async Task DeleteClassroomAsync(long id)
     {
         await _classroomRepository.DeleteAsync(id);
-        return true;
     }
 
     public async Task<IEnumerable<ClassroomDto>> GetAllClassroomsAsync()
@@ -39,15 +38,13 @@ public class ClassroomService : IClassroomService
         return classroom?.ToDto();  
     }
 
-    public async Task<ClassroomDto> UpdateClassroomAsync(long id, CreateClassroomDto classroom)
+    public async Task UpdateClassroomAsync(long id, CreateClassroomDto classroom)
     {
-        var classroomEntity = await _classroomRepository.GetByIdAsync(id);
-        if (classroomEntity == null) return null;
+        var classroomEntity = await _classroomRepository.GetByIdAsync(id) ?? throw new KeyNotFoundException("Classroom not found");
 
         classroomEntity.Name = classroom.Name;
         classroomEntity.Description = classroom.Description;
 
         await _classroomRepository.UpdateAsync(classroomEntity);
-        return classroomEntity.ToDto();
     }
 }

@@ -40,22 +40,14 @@ namespace Aprenda.Backend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(long id, [FromBody] Dtos.Classroom.CreateClassroomDto updateDto)
         {
-            var updatedClassroom = await _classroomService.UpdateClassroomAsync(id, updateDto);
-            if (updatedClassroom == null)
-            {
-                return NotFound();
-            }
-            return Ok(updatedClassroom);
+            await _classroomService.UpdateClassroomAsync(id, updateDto);
+            return NoContent();
         }
         
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
-            var result = await _classroomService.DeleteClassroomAsync(id);
-            if (!result)
-            {
-                return NotFound();
-            }
+            await _classroomService.DeleteClassroomAsync(id);
             return NoContent();
         }
     }
