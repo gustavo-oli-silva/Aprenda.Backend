@@ -23,10 +23,11 @@ public class ArchiveRepository : IArchiveRepository
         return await _dbContext.Archives.FirstOrDefaultAsync(c => c.Id == id);
     }
 
-    public async Task AddAsync(Models.Archive Archive)
+    public async Task<Models.Archive> AddAsync(Models.Archive Archive)
     {
         await _dbContext.Archives.AddAsync(Archive);
         await _dbContext.SaveChangesAsync();
+        return Archive;
     }
 
     public async Task UpdateAsync(Models.Archive Archive)
@@ -45,4 +46,8 @@ public class ArchiveRepository : IArchiveRepository
         }
     }
 
+    public Task<Models.Archive> GetByStoredNameAsync(string storedName)
+    {
+        return _dbContext.Archives.FirstOrDefaultAsync(a => a.StoredName == storedName);
+    }
 }
