@@ -49,6 +49,9 @@ namespace Aprenda.Backend.Migrations
                 nullable: false,
                 defaultValue: "");
 
+
+            // Preenche a coluna StoredName com um valor único gerado para registros existentes
+            migrationBuilder.Sql("UPDATE Archives SET StoredName = NEWID() WHERE StoredName IS NULL OR StoredName = ''");
             migrationBuilder.CreateIndex(
                 name: "IX_Archives_StoredName",
                 table: "Archives",
