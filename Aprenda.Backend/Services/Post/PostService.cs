@@ -4,6 +4,7 @@ using Aprenda.Backend.Dtos.User;
 using Aprenda.Backend.Mappers.Post;
 using Aprenda.Backend.Mappers.User;
 using Aprenda.Backend.Models;
+using Aprenda.Backend.Repositories.Archive;
 using Aprenda.Backend.Repositories.Classroom;
 using Aprenda.Backend.Repositories.Post;
 using Aprenda.Backend.Repositories.User;
@@ -17,11 +18,14 @@ public class PostService : IPostService
 
     private readonly IClassroomRepository _ClassroomRepository;
 
-    public PostService(IPostRepository PostRepository, IUserRepository userRepository, IClassroomRepository classroomRepository)
+    private readonly IArchiveRepository _ArchiveRepository;
+
+    public PostService(IPostRepository PostRepository, IUserRepository userRepository, IClassroomRepository classroomRepository, IArchiveRepository archiveRepository)
     {
         _PostRepository = PostRepository;
         _UserRepository = userRepository;
         _ClassroomRepository = classroomRepository;
+        _ArchiveRepository = archiveRepository;
     }
 
     public async Task<PostDto> CreatePostAsync(long userId, long classroomId, CreatePostDto Post)
@@ -45,6 +49,22 @@ public class PostService : IPostService
 
 
         var PostEntity = PostMapper.ToDomain(Post);
+
+        if (Post.AttachmentIds != null && Post.AttachmentIds.Any())
+        {
+            var archives = await _ArchiveRepository.GetByIdsAsync(Post.AttachmentIds);
+
+            if (archives.Count() != Post.AttachmentIds.Count())
+            {
+                throw new KeyNotFoundException("Um ou mais arquivos anexados não foram encontrados.");
+            }
+
+            foreach (var archive in archives)
+            {
+                PostEntity.Archives.Add(archive);
+            }
+
+        }
         PostEntity.UserId = professor.Id;
         PostEntity.ClassroomId = classroom.Id;
         PostEntity.CreatedAt = DateTime.UtcNow;

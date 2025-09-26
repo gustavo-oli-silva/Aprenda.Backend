@@ -50,4 +50,11 @@ public class ArchiveRepository : IArchiveRepository
     {
         return _dbContext.Archives.FirstOrDefaultAsync(a => a.StoredName == storedName);
     }
+
+    public async Task<IEnumerable<Models.Archive>> GetByIdsAsync(IEnumerable<long> ids)
+    {
+        return await _dbContext.Archives
+        .Where(a => ids.Contains(a.Id))
+        .ToListAsync();
+    }
 }
