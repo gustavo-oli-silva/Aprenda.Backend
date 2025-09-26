@@ -3,6 +3,7 @@ using Aprenda.Backend.Dtos.Classroom;
 using Aprenda.Backend.Dtos.User;
 using Aprenda.Backend.Mappers.User;
 using Aprenda.Backend.Models;
+using Aprenda.Backend.Repositories.Archive;
 using Aprenda.Backend.Repositories.User;
 namespace Aprenda.Backend.Services.User;
 
@@ -10,14 +11,23 @@ public class UserService : IUserService
 {
     private readonly IUserRepository _UserRepository;
 
-    public UserService(IUserRepository UserRepository)
+    private readonly IArchiveRepository _ArchiveRepository;
+
+    public UserService(IUserRepository UserRepository, IArchiveRepository ArchiveRepository)
     {
         _UserRepository = UserRepository;
+        _ArchiveRepository = ArchiveRepository;
     }
 
     public async Task<UserDto> CreateUserAsync(CreateUserDto User)
     {
         var UserEntity = User.ToDomain();
+        var avatar = User.AvatarId != null ? await _ArchiveRepository.GetByIdAsync(User.AvatarId.Value) : null;
+        if (User.AvatarId != null && avatar == null)
+        {
+            throw new KeyNotFoundException("Avatar not found");
+        }
+        UserEntity.Avatar = avatar;
         await _UserRepository.AddAsync(UserEntity);
         return UserEntity.ToDto();
     }
