@@ -20,7 +20,7 @@ public class ClassroomRepository : IClassroomRepository
 
     public async Task<Models.Classroom> GetByIdAsync(long id)
     {
-        return await _dbContext.Classrooms.FindAsync(id);
+        return await _dbContext.Classrooms.Include(c => c.Users).FirstOrDefaultAsync(c => c.Id == id);
     }
 
     public async Task AddAsync(Models.Classroom classroom)

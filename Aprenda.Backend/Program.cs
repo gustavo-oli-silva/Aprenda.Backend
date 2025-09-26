@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Aprenda.Backend.Repositories.Classroom;
 using Aprenda.Backend.Repositories.User;
 using Aprenda.Backend.Services.User;
+using Aprenda.Backend.Repositories.Post;
+using Aprenda.Backend.Services.Post;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,9 @@ builder.Services.AddScoped<IClassroomService, ClassroomService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<IPostService, PostService>();
 
 builder.Services.AddControllers();
 

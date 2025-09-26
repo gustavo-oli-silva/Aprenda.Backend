@@ -17,7 +17,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Dtos/Post/" />
       <Folder Include="Mappers/User/" />
+      <Folder Include="Repositories/Post/" />
       <Folder Include="Repositories/User/" />
       <Folder Include="Services/User/" />
     </ItemGroup>
