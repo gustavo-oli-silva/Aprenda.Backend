@@ -7,7 +7,7 @@ public record UserDto(
     string Name,
     string Email,
     EProfile Profile,
-    string? AvatarUrl,  
+    long? AvatarId,
     DateTime CreatedAt
 );
 

@@ -7,5 +7,5 @@ public record CreateUserDto(
     string Email,
     string Password,
     EProfile Profile,
-    string? AvatarUrl
+    long? AvatarId
 );

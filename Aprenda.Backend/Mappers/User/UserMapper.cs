@@ -12,7 +12,7 @@ public static class UserMapper
             user.Name,
             user.Email,
             user.Profile,
-            user.Avatar?.FilePath ?? string.Empty,
+            user.AvatarId,
             user.CreatedAt
         );
 
@@ -26,11 +26,7 @@ public static class UserMapper
             Password = createDto.Password,
             Profile = createDto.Profile,
             CreatedAt = DateTime.UtcNow,
-            Avatar = string.IsNullOrEmpty(createDto.AvatarUrl) ? null : new Models.Archive
-            {
-                FilePath = createDto.AvatarUrl,
-                FileName = Path.GetFileName(createDto.AvatarUrl) 
-            }
+            AvatarId = createDto.AvatarId
         };
 #pragma warning restore CS8601 // Possible null reference assignment.
 

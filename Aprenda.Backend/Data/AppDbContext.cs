@@ -1,25 +1,26 @@
 using Aprenda.Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Aprenda.Backend.Data; 
+namespace Aprenda.Backend.Data;
+
 public class AppDbContext : DbContext
 {
-    
+
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }
 
     public DbSet<User> Users { get; set; }
-    
+
     public DbSet<Classroom> Classrooms { get; set; }
     public DbSet<Post> Posts { get; set; }
     public DbSet<Homework> Homeworks { get; set; }
     public DbSet<Submission> Submissions { get; set; }
     public DbSet<Grade> Grades { get; set; }
     public DbSet<Archive> Archives { get; set; }
-   
 
-    
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -148,14 +149,24 @@ public class AppDbContext : DbContext
             .IsRequired();
 
         modelBuilder.Entity<Archive>()
-            .Property(a => a.FileName)
+            .Property(a => a.OriginalName)
             .IsRequired()
-            .HasMaxLength(500);
+        .HasMaxLength(255);
+
 
         modelBuilder.Entity<Archive>()
-            .Property(a => a.FilePath)
+            .Property(a => a.StoredName)
             .IsRequired()
-            .HasMaxLength(1000);
+            .HasMaxLength(255);
+
+        modelBuilder.Entity<Archive>()
+            .Property(a => a.ContentType)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        modelBuilder.Entity<Archive>()
+            .HasIndex(a => a.StoredName)
+            .IsUnique();
 
         modelBuilder.Entity<Grade>()
             .Property(g => g.Value)
