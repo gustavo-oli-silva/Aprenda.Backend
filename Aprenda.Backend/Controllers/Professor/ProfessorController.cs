@@ -28,8 +28,8 @@ namespace Aprenda.Backend.Controllers
         [HttpPost("{professorId}/classrooms/{classroomId}/posts")]
         public async Task<IActionResult> CreatePost(long professorId, long classroomId, [FromBody] Dtos.Post.CreatePostDto createDto)
         {
-            await _PostService.CreatePostAsync(professorId, classroomId, createDto);
-            return CreatedAtAction(nameof(CreatePost), new { professorId, classroomId }, createDto);
+            var post = await _PostService.CreatePostAsync(professorId, classroomId, createDto);
+            return CreatedAtAction(nameof(CreatePost), new { professorId, classroomId }, post);
         }
 
         [HttpPost("{professorId}/classrooms/{classroomId}/homeworks")]

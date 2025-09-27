@@ -23,8 +23,8 @@ namespace Aprenda.Backend.Controllers
         [HttpPost("{studentId}/homeworks/{homeworkId}/submissions")]
         public async Task<IActionResult> CreateSubmission(long studentId, long homeworkId, [FromBody] Dtos.Submission.CreateSubmissionDto createDto)
         {
-            await _SubmissionService.CreateSubmissionAsync(studentId, homeworkId, createDto);
-            return CreatedAtAction(nameof(CreateSubmission), new { studentId, homeworkId }, createDto);
+            var submission = await _SubmissionService.CreateSubmissionAsync(studentId, homeworkId, createDto);
+            return CreatedAtAction(nameof(CreateSubmission), new { studentId, homeworkId }, submission);
         }
 
        
