@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Aprenda.Backend.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ClassroomController : ControllerBase
     {
 

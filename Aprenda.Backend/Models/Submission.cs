@@ -10,8 +10,7 @@ public class Submission
 
     public ESubmissionStatus Status { get; set; }
 
-    public long GradeId { get; set; }
-      public virtual Grade Grade { get; set; }
+    public virtual Grade? Grade { get; set; }
 
     // Relacionamento N-para-1: Aluno que fez a entrega.
     public long UserId { get; set; }

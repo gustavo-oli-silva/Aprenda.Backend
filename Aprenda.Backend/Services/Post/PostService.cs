@@ -56,7 +56,7 @@ public class PostService : IPostService
 
             if (archives.Count() != Post.AttachmentIds.Count())
             {
-                throw new KeyNotFoundException("Um ou mais arquivos anexados não foram encontrados.");
+                throw new KeyNotFoundException("One or more attached files were not found.");
             }
 
             foreach (var archive in archives)

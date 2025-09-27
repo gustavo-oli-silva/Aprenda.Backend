@@ -94,10 +94,10 @@ public class AppDbContext : DbContext
 
         // Relacionamento Submission -> Grade - 1:1
         modelBuilder.Entity<Submission>()
-            .HasOne(s => s.Grade)
-            .WithOne(g => g.Submission)
-            .HasForeignKey<Submission>(s => s.GradeId)
-            .OnDelete(DeleteBehavior.Cascade);
+         .HasOne(s => s.Grade)
+         .WithOne(g => g.Submission)
+         .HasForeignKey<Grade>(g => g.SubmissionId)
+         .OnDelete(DeleteBehavior.Cascade);
 
         // Relacionamento Submission -> Archives - 1:N
         modelBuilder.Entity<Submission>()

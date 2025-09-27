@@ -13,6 +13,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Aprenda.Backend.Repositories.Homework;
+using Aprenda.Backend.Services.Homework;
+using Aprenda.Backend.Repositories.Submission;
+using Aprenda.Backend.Services.Submission;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -65,6 +69,14 @@ builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IArchiveRepository, ArchiveRepository>();
 builder.Services.AddScoped<IArchiveService, ArchiveService>();
 
+builder.Services.AddScoped<IHomeworkRepository, HomeworkRepository>();
+builder.Services.AddScoped<IHomeworkService, HomeworkService>();
+
+
+builder.Services.AddScoped<ISubmissionRepository, SubmissionRepository>();
+builder.Services.AddScoped<ISubmissionService, SubmissionService>();
+
+
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -80,23 +92,6 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "Bearer"
     });
 
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement()
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                },
-                Scheme = "oauth2",
-                Name = "Bearer",
-                In = ParameterLocation.Header,
-            },
-            new List<string>()
-        }
-    });
 });
 
 var app = builder.Build();
