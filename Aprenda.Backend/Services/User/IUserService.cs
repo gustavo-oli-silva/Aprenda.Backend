@@ -8,6 +8,7 @@ public interface IUserService
 
     Task<IEnumerable<Dtos.User.UserDto>> GetAllUsersAsync();
     Task<Dtos.User.UserDto> GetUserByIdAsync(long id);
+    Task<Dtos.User.UserDto> GetUserByEmailAsync(string email);
     Task<Dtos.User.UserDto> CreateUserAsync(Dtos.User.CreateUserDto user);
     Task UpdateUserAsync(long id, Dtos.User.CreateUserDto user);
     Task DeleteUserAsync(long id);

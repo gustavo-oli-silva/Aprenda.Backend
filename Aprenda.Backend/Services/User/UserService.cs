@@ -5,6 +5,7 @@ using Aprenda.Backend.Mappers.User;
 using Aprenda.Backend.Models;
 using Aprenda.Backend.Repositories.Archive;
 using Aprenda.Backend.Repositories.User;
+using Aprenda.Backend.Services.Jwt;
 namespace Aprenda.Backend.Services.User;
 
 public class UserService : IUserService
@@ -13,10 +14,13 @@ public class UserService : IUserService
 
     private readonly IArchiveRepository _ArchiveRepository;
 
-    public UserService(IUserRepository UserRepository, IArchiveRepository ArchiveRepository)
+    private readonly IHashService _hashService;
+
+    public UserService(IUserRepository UserRepository, IArchiveRepository ArchiveRepository, IHashService hashService)
     {
         _UserRepository = UserRepository;
         _ArchiveRepository = ArchiveRepository;
+        _hashService = hashService;
     }
 
     public async Task<UserDto> CreateUserAsync(CreateUserDto User)
@@ -28,6 +32,7 @@ public class UserService : IUserService
             throw new KeyNotFoundException("Avatar not found");
         }
         UserEntity.Avatar = avatar;
+        UserEntity.Password =       _hashService.HashPassword(UserEntity.Password);
         await _UserRepository.AddAsync(UserEntity);
         return UserEntity.ToDto();
     }
@@ -41,6 +46,11 @@ public class UserService : IUserService
     {
         var Users = await _UserRepository.GetAllAsync();
         return Users.Select(c => c.ToDto());
+    }
+
+    public async Task<UserDto> GetUserByEmailAsync(string email)
+    {
+        return (await _UserRepository.GetByEmailAsync(email))?.ToDto();
     }
 
     public async Task<UserDto> GetUserByIdAsync(long id)

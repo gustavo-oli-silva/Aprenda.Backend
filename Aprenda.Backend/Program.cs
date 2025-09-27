@@ -17,6 +17,9 @@ using Aprenda.Backend.Repositories.Homework;
 using Aprenda.Backend.Services.Homework;
 using Aprenda.Backend.Repositories.Submission;
 using Aprenda.Backend.Services.Submission;
+using Aprenda.Backend.Services.Jwt;
+using Aprenda.Backend.Services.Hash;
+using Aprenda.Backend.Services.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -75,6 +78,11 @@ builder.Services.AddScoped<IHomeworkService, HomeworkService>();
 
 builder.Services.AddScoped<ISubmissionRepository, SubmissionRepository>();
 builder.Services.AddScoped<ISubmissionService, SubmissionService>();
+
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IHashService, HashService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 
 
 builder.Services.AddControllers();

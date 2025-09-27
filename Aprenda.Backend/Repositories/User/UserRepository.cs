@@ -43,5 +43,10 @@ public class UserRepository : IUserRepository
             _dbContext.Users.Remove(user);
             await _dbContext.SaveChangesAsync();
         }
-    }   
+    }
+
+    public async Task<Models.User> GetByEmailAsync(string email)
+    {
+       return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+    }
 }
