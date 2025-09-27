@@ -27,9 +27,9 @@ public class JwtService : IJwtService
         // Claims são as informações que você quer guardar no token
         var claims = new[]
         {
-        new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()), // 'Subject' (o ID do usuário)
+        new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
         new Claim(JwtRegisteredClaimNames.Email, user.Email),
-        new Claim("role", user.Profile.ToString()) // O perfil (Professor, Aluno)
+        new Claim(ClaimTypes.Role, user.Profile.ToString())
     };
 
         var token = new JwtSecurityToken(

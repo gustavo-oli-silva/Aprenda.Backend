@@ -48,8 +48,6 @@ builder.Services.AddAuthentication(options =>
         // Valida para quem o token foi emitido
         ValidateAudience = true,
         ValidAudience = configuration["Jwt:Audience"],
-
-        RoleClaimType = "role"
     };
 });
 
