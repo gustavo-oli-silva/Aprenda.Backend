@@ -4,18 +4,22 @@ using Aprenda.Backend.Services.Post;
 using Aprenda.Backend.Services.Submission;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aprenda.Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Professor")]
     public class ProfessorController : ControllerBase
     {
 
         private readonly IPostService _PostService;
         private readonly IHomeworkService _HomeworkService;
 
-         private readonly ISubmissionService _SubmissionService;
+        private readonly ISubmissionService _SubmissionService;
 
         public ProfessorController(IPostService PostService, IHomeworkService HomeworkService, ISubmissionService SubmissionService)
         {
@@ -25,11 +29,17 @@ namespace Aprenda.Backend.Controllers
         }
 
 
-        [HttpPost("{professorId}/classrooms/{classroomId}/posts")]
-        public async Task<IActionResult> CreatePost(long professorId, long classroomId, [FromBody] Dtos.Post.CreatePostDto createDto)
+        [HttpPost("classrooms/{classroomId}/posts")]
+        public async Task<IActionResult> CreatePost(long classroomId, [FromBody] Dtos.Post.CreatePostDto createDto)
         {
-            var post = await _PostService.CreatePostAsync(professorId, classroomId, createDto);
-            return CreatedAtAction(nameof(CreatePost), new { professorId, classroomId }, post);
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdString))
+            {
+                return Unauthorized();
+            }
+            long userId = long.Parse(userIdString);
+            var post = await _PostService.CreatePostAsync(userId, classroomId, createDto);
+            return CreatedAtAction(nameof(CreatePost), new { userIdString, classroomId }, post);
         }
 
         [HttpPost("{professorId}/classrooms/{classroomId}/homeworks")]

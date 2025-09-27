@@ -47,7 +47,9 @@ builder.Services.AddAuthentication(options =>
 
         // Valida para quem o token foi emitido
         ValidateAudience = true,
-        ValidAudience = configuration["Jwt:Audience"]
+        ValidAudience = configuration["Jwt:Audience"],
+
+        RoleClaimType = "role"
     };
 });
 
@@ -104,6 +106,8 @@ builder.Services.AddSwaggerGen(options =>
         Type = SecuritySchemeType.Http,
         Scheme = "Bearer"
     });
+
+     options.OperationFilter<SecurityRequirementsOperationFilter>();
 
 });
 
