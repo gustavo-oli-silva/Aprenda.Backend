@@ -32,7 +32,7 @@ public class UserService : IUserService
             throw new KeyNotFoundException("Avatar not found");
         }
         UserEntity.Avatar = avatar;
-        UserEntity.Password =       _hashService.HashPassword(UserEntity.Password);
+        UserEntity.Password = _hashService.HashPassword(UserEntity.Password);
         await _UserRepository.AddAsync(UserEntity);
         return UserEntity.ToDto();
     }

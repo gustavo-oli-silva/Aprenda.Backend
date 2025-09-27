@@ -29,7 +29,7 @@ public class JwtService : IJwtService
         {
         new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()), // 'Subject' (o ID do usuário)
         new Claim(JwtRegisteredClaimNames.Email, user.Email),
-        new Claim(ClaimTypes.Role, user.Profile.ToString()) // O perfil (Professor, Aluno)
+        new Claim("role", user.Profile.ToString()) // O perfil (Professor, Aluno)
     };
 
         var token = new JwtSecurityToken(
