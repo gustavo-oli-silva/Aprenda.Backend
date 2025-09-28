@@ -1,4 +1,6 @@
 using System;
+using System.Security.Cryptography;
+using System.Text;
 using Aprenda.Backend.Dtos.Classroom;
 using Aprenda.Backend.Dtos.User;
 using Aprenda.Backend.Mappers.Classroom;
@@ -13,6 +15,8 @@ public class ClassroomService : IClassroomService
 {
     private readonly IClassroomRepository _classroomRepository;
     private readonly IUserRepository _userRepository;
+
+    private const string CharacterSet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
     public ClassroomService(IClassroomRepository classroomRepository, IUserRepository userRepository)
     {
@@ -33,11 +37,34 @@ public class ClassroomService : IClassroomService
         await _classroomRepository.AssignUserToClassroom(classroom, user);
     }
 
-    public async Task<ClassroomDto> CreateClassroomAsync(CreateClassroomDto classroom)
+    public async Task<ClassroomDto> CreateClassroomAsync(long userId, CreateClassroomDto classroom)
     {
         var classroomEntity = ClassroomMapper.ToDomain(classroom);
+        var user = await _userRepository.GetByIdAsync(userId) ?? throw new KeyNotFoundException("User not found");
+        if (user.Profile != EProfile.Professor)
+        {
+            throw new InvalidOperationException("Only professors can create classrooms");
+        }
+
+        string newCode = await ValidateInviteCode();
+
+        classroomEntity.InviteCode = newCode;
         await _classroomRepository.AddAsync(classroomEntity);
+        await AssignUserToClassroom(classroomEntity.Id, userId);
         return classroomEntity.ToDto();
+    }
+
+    private async Task<string> ValidateInviteCode()
+    {
+        string newCode;
+        bool codeExists;
+
+        do
+        {
+            newCode = await GenerateInviteCode(6);
+            codeExists = await _classroomRepository.InviteCodeExistsAsync(newCode);
+        } while (codeExists);
+        return newCode;
     }
 
     public async Task DeleteClassroomAsync(long id)
@@ -93,6 +120,35 @@ public class ClassroomService : IClassroomService
         return Task.FromResult<IEnumerable<UserDto?>>(professors);
     }
 
+    public async Task<string> GenerateInviteCode(int length = 6)
+    {
+        var result = new StringBuilder(length);
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            byte[] uintBuffer = new byte[sizeof(uint)];
 
-    
+            while (result.Length < length)
+            {
+                rng.GetBytes(uintBuffer);
+                uint num = BitConverter.ToUInt32(uintBuffer, 0);
+
+                result.Append(CharacterSet[(int)(num % (uint)CharacterSet.Length)]);
+            }
+        }
+
+        return result.ToString();
+    }
+
+    public async Task JoinClassroom(string inviteCode, long userId)
+    {
+        var classroom = await _classroomRepository.GetClassroomByInviteCodeAsync(inviteCode) ?? throw new KeyNotFoundException("Classroom not found");
+        var user = await _userRepository.GetByIdAsync(userId) ?? throw new KeyNotFoundException("User not found");
+
+        if (classroom.Users.Any(u => u.Id == userId))
+        {
+            throw new InvalidOperationException("User is already assigned to this classroom");
+        }
+
+         await _classroomRepository.AssignUserToClassroom(classroom, user);
+    }
 }

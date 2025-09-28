@@ -12,7 +12,8 @@ public static class ClassroomMapper
             classroom.Name,
             classroom.Description,
             classroom.CreatedAt,
-            classroom.Users.Select(u => u.ToDto())
+            classroom.Users.Select(u => u.ToDto()),
+            classroom.InviteCode
         );
 
 

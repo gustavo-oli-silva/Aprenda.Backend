@@ -12,5 +12,9 @@ public interface IClassroomRepository
 
     Task AssignUserToClassroom(Models.Classroom classroom, Models.User user);
 
-    Task <Models.Classroom> GetClassroomWithUsersAsync(long id);
+    Task<Models.Classroom> GetClassroomWithUsersAsync(long id);
+
+    Task<bool> InviteCodeExistsAsync(string code);
+
+    Task<Models.Classroom> GetClassroomByInviteCodeAsync(string inviteCode);
 }

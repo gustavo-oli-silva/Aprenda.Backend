@@ -171,5 +171,10 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Grade>()
             .Property(g => g.Value)
             .HasPrecision(5, 2);
+
+        modelBuilder.Entity<Classroom>()
+            .HasIndex(c => c.InviteCode)
+            .IsUnique();
+
     }
 }

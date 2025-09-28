@@ -41,17 +41,17 @@ namespace Aprenda.Backend.Controllers
         }
 
         [Authorize]
-        [HttpPost("{classroomId}/users")]
-        public async Task<IActionResult> AssignUser(long classroomId)
+        [HttpPost("{inviteCode}/join")]
+        public async Task<IActionResult> JoinClassroom(string inviteCode)
         {
-            _logger.LogInformation("User joining classroom {ClassroomId}", classroomId);
+            _logger.LogInformation("User joining classroom with invite code {InviteCode}", inviteCode);
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userIdString))
             {
                 return Unauthorized();
             }
             long userId = long.Parse(userIdString);
-            await _classroomService.AssignUserToClassroom(classroomId, userId);
+            await _classroomService.JoinClassroom(inviteCode, userId);
             return NoContent();
         }
 
@@ -76,7 +76,13 @@ namespace Aprenda.Backend.Controllers
         public async Task<IActionResult> Create([FromBody] Dtos.Classroom.CreateClassroomDto createDto)
         {
             _logger.LogInformation("Creating new classroom with name {ClassroomName}", createDto.Name);
-            var classroom = await _classroomService.CreateClassroomAsync(createDto);
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdString))
+            {
+                return Unauthorized();
+            }
+            long userId = long.Parse(userIdString);
+            var classroom = await _classroomService.CreateClassroomAsync(userId, createDto);
             return CreatedAtAction(nameof(GetById), new { id = classroom.Id }, classroom);
         }
 

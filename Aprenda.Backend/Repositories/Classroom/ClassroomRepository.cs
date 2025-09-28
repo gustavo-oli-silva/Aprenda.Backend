@@ -55,4 +55,14 @@ public class ClassroomRepository : IClassroomRepository
     {
         return _dbContext.Classrooms.Include(c => c.Users).FirstOrDefaultAsync(c => c.Id == id);
     }
+
+    public async Task<bool> InviteCodeExistsAsync(string code)
+    {
+        return await _dbContext.Classrooms.AnyAsync(c => c.InviteCode == code);
+    }
+
+    public async Task<Models.Classroom> GetClassroomByInviteCodeAsync(string inviteCode)
+    {
+        return await _dbContext.Classrooms.Include(c => c.Users).FirstOrDefaultAsync(c => c.InviteCode == inviteCode);
+    }
 }

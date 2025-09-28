@@ -7,6 +7,7 @@ public record ClassroomDto(
     string Name,
     string Description,
     DateTime CreatedAt,
-    IEnumerable<UserDto> Users
+    IEnumerable<UserDto> Users,
+    string InviteCode
 );
 

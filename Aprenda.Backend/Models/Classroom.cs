@@ -20,4 +20,6 @@ public class Classroom
     public long? IconId { get; set; }
     public virtual Archive Icon { get; set; }
 
+    public string InviteCode { get; set; }
+
 }
