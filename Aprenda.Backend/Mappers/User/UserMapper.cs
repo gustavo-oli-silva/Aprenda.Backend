@@ -1,6 +1,7 @@
 using System;
 using Aprenda.Backend.Dtos.Classroom;
 using Aprenda.Backend.Dtos.User;
+using Aprenda.Backend.Models;
 
 namespace Aprenda.Backend.Mappers.User;
 
@@ -11,7 +12,7 @@ public static class UserMapper
             user.Id,
             user.Name,
             user.Email,
-            user.Profile,
+            (EProfile) Enum.Parse(typeof(EProfile), user.Profile.ToString()),
             user.AvatarId,
             user.CreatedAt
         );
