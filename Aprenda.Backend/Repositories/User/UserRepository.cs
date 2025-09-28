@@ -47,6 +47,13 @@ public class UserRepository : IUserRepository
 
     public async Task<Models.User> GetByEmailAsync(string email)
     {
-       return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+        return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
+    
+    public async Task<Models.User> GetByIdWithClassroomsAsync(long id)
+{
+    return await _dbContext.Users
+        .Include(u => u.Classrooms)
+        .FirstOrDefaultAsync(u => u.Id == id);
+}
 }

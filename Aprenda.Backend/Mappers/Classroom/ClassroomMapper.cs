@@ -1,5 +1,6 @@
 using System;
 using Aprenda.Backend.Dtos.Classroom;
+using Aprenda.Backend.Mappers.User;
 
 namespace Aprenda.Backend.Mappers.Classroom;
 
@@ -10,7 +11,8 @@ public static class ClassroomMapper
             classroom.Id,
             classroom.Name,
             classroom.Description,
-            classroom.CreatedAt
+            classroom.CreatedAt,
+            classroom.Users.Select(u => u.ToDto())
         );
 
 

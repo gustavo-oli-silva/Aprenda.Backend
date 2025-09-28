@@ -7,6 +7,8 @@ public interface IUserRepository
     Task<IEnumerable<Models.User>> GetAllAsync();
     Task<Models.User> GetByIdAsync(long id);
 
+    Task<Models.User> GetByIdWithClassroomsAsync(long id);
+
     Task<Models.User> GetByEmailAsync(string email);
     Task AddAsync(Models.User user);
     Task UpdateAsync(Models.User user);

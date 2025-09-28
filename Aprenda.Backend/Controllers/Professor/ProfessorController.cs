@@ -8,6 +8,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
+using Aprenda.Backend.Services.User;
 
 namespace Aprenda.Backend.Controllers
 {
@@ -20,13 +21,16 @@ namespace Aprenda.Backend.Controllers
         private readonly IPostService _PostService;
         private readonly IHomeworkService _HomeworkService;
         private readonly ISubmissionService _SubmissionService;
+
+        private readonly IUserService _UserService;
         private readonly ILogger<ProfessorController> _logger;
 
-        public ProfessorController(IPostService PostService, IHomeworkService HomeworkService, ISubmissionService SubmissionService, ILogger<ProfessorController> logger)
+        public ProfessorController(IPostService PostService, IHomeworkService HomeworkService, ISubmissionService SubmissionService, IUserService UserService, ILogger<ProfessorController> logger)
         {
             _PostService = PostService;
             _HomeworkService = HomeworkService;
             _SubmissionService = SubmissionService;
+            _UserService = UserService;
             _logger = logger;
         }
 
@@ -116,6 +120,22 @@ namespace Aprenda.Backend.Controllers
             _logger.LogInformation("Professor retrieving submissions for homework {HomeworkId}", homeworkId);
             var submissions = await _SubmissionService.GetAllSubmissionsByHomeworkIdAsync(homeworkId);
             return Ok(submissions);
+        }
+
+
+         [Authorize(Roles = "Professor")]
+        [HttpGet("classrooms")]
+        public async Task<IActionResult> GetAllClassrooms()
+        {
+            _logger.LogInformation("Retrieving all classrooms");
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdString))
+            {
+                return Unauthorized();
+            }
+            long userId = long.Parse(userIdString);
+            var classrooms = await _UserService.GetClassroomsByUserIdAsync(userId);
+            return Ok(classrooms);
         }
 
     }

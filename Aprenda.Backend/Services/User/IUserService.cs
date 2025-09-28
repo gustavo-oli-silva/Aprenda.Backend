@@ -12,4 +12,6 @@ public interface IUserService
     Task<Dtos.User.UserDto> CreateUserAsync(Dtos.User.CreateUserDto user);
     Task UpdateUserAsync(long id, Dtos.User.CreateUserDto user);
     Task DeleteUserAsync(long id);
+
+    Task<IEnumerable<Dtos.Classroom.ClassroomDto>> GetClassroomsByUserIdAsync(long userId);
 }

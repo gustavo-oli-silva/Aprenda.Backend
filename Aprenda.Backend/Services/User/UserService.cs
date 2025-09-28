@@ -1,6 +1,7 @@
 using System;
 using Aprenda.Backend.Dtos.Classroom;
 using Aprenda.Backend.Dtos.User;
+using Aprenda.Backend.Mappers.Classroom;
 using Aprenda.Backend.Mappers.User;
 using Aprenda.Backend.Models;
 using Aprenda.Backend.Repositories.Archive;
@@ -48,6 +49,17 @@ public class UserService : IUserService
         return Users.Select(c => c.ToDto());
     }
 
+    public async Task<IEnumerable<ClassroomDto>> GetClassroomsByUserIdAsync(long userId)
+    {
+        var user = await _UserRepository.GetByIdWithClassroomsAsync(userId)
+            ?? throw new KeyNotFoundException("User not found");
+
+        if (user.Classrooms == null || !user.Classrooms.Any())
+            return Enumerable.Empty<ClassroomDto>();
+
+        return user.Classrooms.Select(ClassroomMapper.ToDto);
+    }
+
     public async Task<UserDto> GetUserByEmailAsync(string email)
     {
         return (await _UserRepository.GetByEmailAsync(email))?.ToDto();
@@ -56,7 +68,7 @@ public class UserService : IUserService
     public async Task<UserDto> GetUserByIdAsync(long id)
     {
         var User = await _UserRepository.GetByIdAsync(id);
-        return User?.ToDto();  
+        return User?.ToDto();
     }
 
     public async Task UpdateUserAsync(long id, CreateUserDto User)
@@ -67,7 +79,7 @@ public class UserService : IUserService
         UserEntity.Email = User.Email;
         UserEntity.Password = User.Password;
         UserEntity.Profile = User.Profile;
-        
+
 
         await _UserRepository.UpdateAsync(UserEntity);
     }
