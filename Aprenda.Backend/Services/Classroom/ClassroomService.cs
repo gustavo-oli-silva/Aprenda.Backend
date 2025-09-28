@@ -51,9 +51,10 @@ public class ClassroomService : IClassroomService
         return classrooms.Select(c => c.ToDto());
     }
 
-    public Task<ClassroomDto> GetClassroomByIdAsync(long id)
+    public async Task<ClassroomDto> GetClassroomByIdAsync(long id)
     {
-        throw new NotImplementedException();
+        var classroom = await _classroomRepository.GetByIdAsync(id);
+        return classroom?.ToDto();
     }
 
 

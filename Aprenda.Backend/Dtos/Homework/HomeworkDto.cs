@@ -1,3 +1,4 @@
+using Aprenda.Backend.Dtos.Submission;
 using Aprenda.Backend.Dtos.User;
 
 namespace Aprenda.Backend.Dtos.Homework;
@@ -9,6 +10,7 @@ public record HomeworkDto(
     bool IsFixed,
     UserDto User,
     long ClassroomId,
-    DateTime DueDate
+    DateTime DueDate,
+    IEnumerable<SubmissionDto> Submissions
 );
 

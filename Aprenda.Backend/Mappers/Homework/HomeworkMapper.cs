@@ -1,5 +1,6 @@
 using System;
 using Aprenda.Backend.Dtos.Homework;
+using Aprenda.Backend.Mappers.Submission;
 using Aprenda.Backend.Mappers.User;
 
 namespace Aprenda.Backend.Mappers.Homework;
@@ -14,7 +15,8 @@ public static class HomeworkMapper
             Homework.IsFixed,
             UserMapper.ToDto(Homework.User),
             Homework.ClassroomId,
-            Homework.DueDate
+            Homework.DueDate,
+            Homework.Submissions.Select(s => s.ToDto()) 
         );
 
 
