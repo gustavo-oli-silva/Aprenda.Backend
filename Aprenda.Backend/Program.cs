@@ -20,6 +20,8 @@ using Aprenda.Backend.Services.Submission;
 using Aprenda.Backend.Services.Jwt;
 using Aprenda.Backend.Services.Hash;
 using Aprenda.Backend.Services.Auth;
+using System.Text.Json;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -98,9 +100,17 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IHashService, HashService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddHttpContextAccessor();
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // Esta é a linha mais importante.
+        // Ela diz ao ASP.NET para usar camelCase ao serializar/desserializar JSON.
+        // Assim, ele vai mapear "attachmentsIds" do JSON para "AttachmentIds" no C#.
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    });
 
 builder.Services.AddRouting(options =>
 {
@@ -134,6 +144,13 @@ if (app.Environment.IsDevelopment())
 }
 
 // app.UseHttpsRedirection();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "Uploads")), // Caminho físico para a pasta "Uploads"
+    RequestPath = "/archives" // Caminho na URL (ex.: http://localhost:5000/archives/nomeDoArquivo.ext)
+});
+
 app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthentication();
 app.UseAuthorization();

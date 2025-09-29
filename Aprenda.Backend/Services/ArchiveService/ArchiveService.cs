@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using Aprenda.Backend.Models;
+using Aprenda.Backend.Mappers.Archive;
 namespace Aprenda.Backend.Services.ArchiveService;
 
 public class ArchiveService : IArchiveService
@@ -12,9 +13,12 @@ public class ArchiveService : IArchiveService
     private readonly IArchiveRepository _archiveRepository;
     private readonly string _uploadsFolderPath;
 
-    public ArchiveService(IArchiveRepository archiveRepository, IConfiguration configuration, IWebHostEnvironment env)
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public ArchiveService(IArchiveRepository archiveRepository, IConfiguration configuration, IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor)
     {
         _archiveRepository = archiveRepository;
+        _httpContextAccessor = httpContextAccessor;
         string relativePath = configuration.GetValue<string>("StorageSettings:UploadsFolderPath");
 
         if (string.IsNullOrEmpty(relativePath))
@@ -80,16 +84,9 @@ public class ArchiveService : IArchiveService
         };
 
         var savedArchive = await _archiveRepository.AddAsync(archiveEntity);
-        var downloadUrl = $"/api/Archive/download/{savedArchive.StoredName}";
+        return savedArchive.ToDto(_httpContextAccessor);
 
-        return new ArchiveDto(
-            savedArchive.Id,
-            savedArchive.OriginalName,
-            savedArchive.ContentType,
-            savedArchive.SizeInBytes,
-            savedArchive.UploadedAt,
-            downloadUrl
-        );
+       
     }
 
     private static void ValidateUpload(IFormFile file)
@@ -105,4 +102,5 @@ public class ArchiveService : IArchiveService
             throw new ArgumentException($"O tamanho do arquivo excede o limite de {maxFileSize / 1024 / 1024} MB.");
         }
     }
+
 }

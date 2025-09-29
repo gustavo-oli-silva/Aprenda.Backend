@@ -20,12 +20,15 @@ public class PostService : IPostService
 
     private readonly IArchiveRepository _ArchiveRepository;
 
-    public PostService(IPostRepository PostRepository, IUserRepository userRepository, IClassroomRepository classroomRepository, IArchiveRepository archiveRepository)
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public PostService(IPostRepository PostRepository, IUserRepository userRepository, IClassroomRepository classroomRepository, IArchiveRepository archiveRepository, IHttpContextAccessor httpContextAccessor)
     {
         _PostRepository = PostRepository;
         _UserRepository = userRepository;
         _ClassroomRepository = classroomRepository;
         _ArchiveRepository = archiveRepository;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<PostDto> CreatePostAsync(long userId, long classroomId, CreatePostDto Post)
@@ -69,7 +72,7 @@ public class PostService : IPostService
         PostEntity.ClassroomId = classroom.Id;
         PostEntity.CreatedAt = DateTime.UtcNow;
         await _PostRepository.AddAsync(PostEntity);
-        return PostEntity.ToDto();
+        return PostEntity.ToDto(_httpContextAccessor);
     }
 
     public async Task DeletePostAsync(long id)
@@ -96,18 +99,18 @@ public class PostService : IPostService
     public async Task<IEnumerable<PostDto>> GetAllPostsAsync()
     {
         var Posts = await _PostRepository.GetAllAsync();
-        return Posts.Select(c => c.ToDto());
+        return Posts.Select(c => c.ToDto(_httpContextAccessor));
     }
 
     public async Task<IEnumerable<PostDto>> GetAllPostsByClassroomIdAsync(long classroomId)
     {
         var Posts = await _PostRepository.GetPostsByClassroomIdAsync(classroomId);
-        return Posts.Select(c => c.ToDto());
+        return Posts.Select(c => c.ToDto(_httpContextAccessor));
     }
 
     public async Task<PostDto> GetPostByIdAsync(long id)
     {
-        return await _PostRepository.GetByIdAsync(id) is Models.Post Post ? Post.ToDto() : throw new KeyNotFoundException("Post not found");
+        return await _PostRepository.GetByIdAsync(id) is Models.Post Post ? Post.ToDto(_httpContextAccessor) : throw new KeyNotFoundException("Post not found");
     }
 
     public async Task UpdatePostAsync(long userId, long idPost, CreatePostDto Post)

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
+using Aprenda.Backend.Services.User;
 
 namespace Aprenda.Backend.Controllers
 {
@@ -18,10 +19,13 @@ namespace Aprenda.Backend.Controllers
         private readonly ISubmissionService _SubmissionService;
         private readonly ILogger<StudentController> _logger;
 
-        public StudentController(ISubmissionService SubmissionService, ILogger<StudentController> logger)
+        private readonly IUserService _UserService;
+
+        public StudentController(ISubmissionService SubmissionService, ILogger<StudentController> logger, IUserService UserService)
         {
             _SubmissionService = SubmissionService;
             _logger = logger;
+            _UserService = UserService;
         }
 
 
@@ -40,7 +44,7 @@ namespace Aprenda.Backend.Controllers
             return CreatedAtAction(nameof(CreateSubmission), new { homeworkId }, submission);
         }
 
-       
+
 
         [Authorize(Roles = "Student")]
         [HttpGet("homeworks/{homeworkId}/submissions")]
@@ -49,6 +53,21 @@ namespace Aprenda.Backend.Controllers
             _logger.LogInformation("Student retrieving submissions for homework {HomeworkId}", homeworkId);
             var submissions = await _SubmissionService.GetAllSubmissionsByHomeworkIdAsync(homeworkId);
             return Ok(submissions);
+        }
+
+        [Authorize(Roles = "Student")]
+        [HttpGet("classrooms")]
+        public async Task<IActionResult> GetAllClassrooms()
+        {
+            _logger.LogInformation("Retrieving all classrooms");
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdString))
+            {
+                return Unauthorized();
+            }
+            long userId = long.Parse(userIdString);
+            var classrooms = await _UserService.GetClassroomsByUserIdAsync(userId);
+            return Ok(classrooms);
         }
 
 

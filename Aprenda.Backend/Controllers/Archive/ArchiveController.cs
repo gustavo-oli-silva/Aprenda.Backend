@@ -21,7 +21,7 @@ namespace Aprenda.Backend.Controllers
             _logger = logger;
         }
 
-        [Authorize]
+        // [Authorize]
         [HttpPost("upload")]
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
@@ -43,7 +43,7 @@ namespace Aprenda.Backend.Controllers
             }
         }
 
-        [Authorize]
+        // [Authorize]
         [HttpGet("download/{storedName}")]
         public async Task<IActionResult> DownloadFile(string storedName)
         {

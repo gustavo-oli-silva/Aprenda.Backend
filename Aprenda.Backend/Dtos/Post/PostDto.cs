@@ -1,3 +1,4 @@
+using Aprenda.Backend.Dtos.Archive;
 using Aprenda.Backend.Dtos.User;
 
 namespace Aprenda.Backend.Dtos.Post;
@@ -8,6 +9,7 @@ public record PostDto(
     string Content,
     bool IsFixed,
     UserDto User,
-    long ClassroomId
+    long ClassroomId,
+    IEnumerable<ArchiveDto> Archives
 );
 

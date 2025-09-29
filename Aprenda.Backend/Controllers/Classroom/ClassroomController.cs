@@ -41,7 +41,7 @@ namespace Aprenda.Backend.Controllers
         }
 
         [Authorize]
-        [HttpPost("{inviteCode}/join")]
+            [HttpPost("{inviteCode}/join")]
         public async Task<IActionResult> JoinClassroom(string inviteCode)
         {
             _logger.LogInformation("User joining classroom with invite code {InviteCode}", inviteCode);

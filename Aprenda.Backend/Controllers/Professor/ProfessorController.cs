@@ -64,7 +64,7 @@ namespace Aprenda.Backend.Controllers
             return CreatedAtAction(nameof(CreateHomework), new { classroomId }, homework);
         }
 
-        [Authorize(Roles = "Professor")]
+        [Authorize(Roles = "Professor, Student")]
         [HttpGet("classrooms/{classroomId}/homeworks")]
         public async Task<IActionResult> GetAllHomeworksByClassroomId(long classroomId)
         {
@@ -74,7 +74,7 @@ namespace Aprenda.Backend.Controllers
         }
 
 
-        [Authorize(Roles = "Professor")]
+        [Authorize(Roles = "Professor, Student")]
         [HttpGet("classrooms/{classroomId}/posts")]
         public async Task<IActionResult> GetAllPostsByClassroomId(long classroomId)
         {
@@ -123,7 +123,7 @@ namespace Aprenda.Backend.Controllers
         }
 
 
-         [Authorize(Roles = "Professor")]
+        [Authorize(Roles = "Professor")]
         [HttpGet("classrooms")]
         public async Task<IActionResult> GetAllClassrooms()
         {
