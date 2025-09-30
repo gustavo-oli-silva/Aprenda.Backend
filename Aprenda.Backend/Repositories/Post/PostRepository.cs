@@ -47,6 +47,11 @@ public class PostRepository : IPostRepository
 
     public async Task<IEnumerable<Models.Post>> GetPostsByClassroomIdAsync(long idClassroom)
     {
-        return await _dbContext.Posts.Include(p => p.User).Include(p => p.Archives).Where(p => p.ClassroomId == idClassroom).ToListAsync();
+        return await _dbContext.Posts.Include(p => p.User)
+        .Include(p => p.Archives)
+        .Where(p => p.ClassroomId == idClassroom)
+        .OfType<Models.Post>()
+        .Where(p => !(p is Models.Homework)) 
+        .ToListAsync();
     }
 }
