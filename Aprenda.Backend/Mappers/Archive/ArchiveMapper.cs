@@ -21,7 +21,7 @@ public static class ArchiveMapper
     {
         var request = httpContextAccessor.HttpContext.Request;
         var baseUrl = $"{request.Scheme}://{request.Host}";
-        var relativePath = $"/api/archives/download/{archive.StoredName}";
+        var relativePath = $"/api/archive/download/{archive.StoredName}";
         return $"{baseUrl}{relativePath}";
     }
    
