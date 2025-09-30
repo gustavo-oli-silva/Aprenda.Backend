@@ -5,5 +5,5 @@ public record CreateHomeworkDto(
     string Content,
     bool IsFixed,
     List<long> AttachmentIds,
-    DateTime DueDate
+    DateTime? DueDate
 );

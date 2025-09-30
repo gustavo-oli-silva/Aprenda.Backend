@@ -42,7 +42,7 @@ public class SubmissionService : ISubmissionService
             throw new KeyNotFoundException("Homework not found");
         }
 
-        var dueDateUtc = DateTime.SpecifyKind(homework.DueDate, DateTimeKind.Utc);
+        var dueDateUtc = DateTime.SpecifyKind(homework.DueDate.Value, DateTimeKind.Utc);
         if (DateTime.UtcNow > dueDateUtc)
         {
             throw new Exception("The deadline for submitting this homework has already passed.");
