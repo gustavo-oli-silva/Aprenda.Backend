@@ -20,7 +20,7 @@ public class HomeworkRepository : IHomeworkRepository
 
     public async Task<Models.Homework> GetByIdAsync(long id)
     {
-        return await _dbContext.Homeworks.FindAsync(id);
+        return await _dbContext.Homeworks.Include(h => h.User).FirstOrDefaultAsync(h => h.Id == id);
     }
 
     public async Task AddAsync(Models.Homework Homework)

@@ -98,9 +98,14 @@ public class SubmissionService : ISubmissionService
     }
 
 
-    public async Task<IEnumerable<SubmissionDto>> GetAllSubmissionsByHomeworkIdAsync(long homeworkId)
+    public async Task<IEnumerable<SubmissionDto>> GetAllSubmissionsByHomeworkIdAsync(long userId, long homeworkId)
     {
-        var submissions = await _SubmissionRepository.GetAllSubmissionsByHomeworkIdAsync(homeworkId);
+        var student = await _UserRepository.GetByIdAsync(userId);
+        if (student == null || student.Profile != EProfile.Student)
+        {
+            throw new KeyNotFoundException("User not found or is not a student");
+        }
+        var submissions = await _SubmissionRepository.GetAllSubmissionsByHomeworkIdAsync(userId, homeworkId);
         return submissions.Select(c => c.ToDto());
     }
 

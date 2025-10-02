@@ -51,7 +51,13 @@ namespace Aprenda.Backend.Controllers
         public async Task<IActionResult> GetAllSubmissionsByHomeworkId(long homeworkId)
         {
             _logger.LogInformation("Student retrieving submissions for homework {HomeworkId}", homeworkId);
-            var submissions = await _SubmissionService.GetAllSubmissionsByHomeworkIdAsync(homeworkId);
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdString))
+            {
+                return Unauthorized();
+            }
+            long userId = long.Parse(userIdString);
+            var submissions = await _SubmissionService.GetAllSubmissionsByHomeworkIdAsync(userId, homeworkId);
             return Ok(submissions);
         }
 
