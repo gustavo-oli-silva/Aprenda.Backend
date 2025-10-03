@@ -4,6 +4,7 @@ using Aprenda.Backend.Mappers.User;
 using Aprenda.Backend.Mappers.Archive; // Add this using
 using Microsoft.AspNetCore.Http;       // Add this using
 using System.Linq;
+using Aprenda.Backend.Mappers.Grade;
 
 namespace Aprenda.Backend.Mappers.Submission;
 
@@ -16,7 +17,8 @@ public static class SubmissionMapper
             submission.HomeworkId,
             submission.Status,
             submission.Archives.Select(a => a.ToDto(httpContextAccessor)) ,
-            submission.SubmittedAt
+            submission.SubmittedAt,
+            submission.Grade?.ToDto()
         );
 
 

@@ -47,11 +47,12 @@ public class SubmissionRepository : ISubmissionRepository
 
     public async Task<IEnumerable<Models.Submission>> GetAllSubmissionsByHomeworkIdAsync(long userId, long idHomework)
     {
-        return await _dbContext.Submissions.Include(s => s.Archives).Include(s => s.User).Where(s => s.UserId == userId).Where(s => s.HomeworkId == idHomework).ToListAsync();
+        return await _dbContext.Submissions.Include(s => s.Archives).Include(s => s.User).Include(s => s.Grade).Where(s => s.UserId == userId).Where(s => s.HomeworkId == idHomework).ToListAsync();
     }
     
     public async Task<IEnumerable<Models.Submission>> GetAllSubmissionsByHomeworkIdAsync(long idHomework)
     {
-        return await _dbContext.Submissions.Include(s => s.Archives).Include(s => s.User).Where(s => s.HomeworkId == idHomework).ToListAsync();
+        return await _dbContext.Submissions.Include(s => s.Archives).Include(s => s.User).Include(s => s.Grade).Where(s => s.HomeworkId == idHomework).ToListAsync();
     }
+
 }

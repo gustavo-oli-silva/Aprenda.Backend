@@ -22,6 +22,8 @@ using Aprenda.Backend.Services.Hash;
 using Aprenda.Backend.Services.Auth;
 using System.Text.Json;
 using Microsoft.Extensions.FileProviders;
+using Aprenda.Backend.Repositories.Grade;
+using Aprenda.Backend.Services.Grade;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -95,6 +97,9 @@ builder.Services.AddScoped<IHomeworkService, HomeworkService>();
 
 builder.Services.AddScoped<ISubmissionRepository, SubmissionRepository>();
 builder.Services.AddScoped<ISubmissionService, SubmissionService>();
+
+builder.Services.AddScoped<IGradeRepository, GradeRepository>();
+builder.Services.AddScoped<IGradeService, GradeService>();
 
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IHashService, HashService>();

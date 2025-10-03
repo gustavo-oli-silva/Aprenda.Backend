@@ -1,4 +1,5 @@
 using System;
+using System.Formats.Asn1;
 using Aprenda.Backend.Dtos.Submission;
 using Aprenda.Backend.Dtos.User;
 using Aprenda.Backend.Mappers.Submission;
@@ -123,6 +124,13 @@ public class SubmissionService : ISubmissionService
     public async Task<SubmissionDto> GetSubmissionByIdAsync(long id)
     {
         return await _SubmissionRepository.GetByIdAsync(id) is Models.Submission submission ? submission.ToDto(_httpContextAccessor) : throw new KeyNotFoundException("Submission not found");
+    }
+
+    public async Task UpdateStatusAsync(long id, ESubmissionStatus status)
+    {
+       var submission = await _SubmissionRepository.GetByIdAsync(id) ?? throw new KeyNotFoundException("Submission not found");
+        submission.Status = status;
+        await _SubmissionRepository.UpdateAsync(submission);
     }
 
     public async Task UpdateSubmissionAsync(long userId, long idSubmission, CreateSubmissionDto submission)

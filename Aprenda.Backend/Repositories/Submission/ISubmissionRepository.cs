@@ -9,7 +9,7 @@ public interface ISubmissionRepository
 
     Task<IEnumerable<Models.Submission>> GetAllSubmissionsByHomeworkIdAsync(long userId, long idHomework);
 
-       Task<IEnumerable<Models.Submission>> GetAllSubmissionsByHomeworkIdAsync(long idHomework);
+    Task<IEnumerable<Models.Submission>> GetAllSubmissionsByHomeworkIdAsync(long idHomework);
 
     Task AddAsync(Models.Submission Submission);
     Task UpdateAsync(Models.Submission Submission);

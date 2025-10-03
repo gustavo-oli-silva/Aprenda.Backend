@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Aprenda.Backend.Services.User;
+using Aprenda.Backend.Services.Grade;
 
 namespace Aprenda.Backend.Controllers
 {
@@ -23,14 +24,16 @@ namespace Aprenda.Backend.Controllers
         private readonly ISubmissionService _SubmissionService;
 
         private readonly IUserService _UserService;
+        private readonly IGradeService _GradeService;
         private readonly ILogger<ProfessorController> _logger;
 
-        public ProfessorController(IPostService PostService, IHomeworkService HomeworkService, ISubmissionService SubmissionService, IUserService UserService, ILogger<ProfessorController> logger)
+        public ProfessorController(IPostService PostService, IHomeworkService HomeworkService, ISubmissionService SubmissionService, IUserService UserService, IGradeService GradeService, ILogger<ProfessorController> logger)
         {
             _PostService = PostService;
             _HomeworkService = HomeworkService;
             _SubmissionService = SubmissionService;
             _UserService = UserService;
+            _GradeService = GradeService;
             _logger = logger;
         }
 
@@ -62,6 +65,15 @@ namespace Aprenda.Backend.Controllers
             long userId = long.Parse(userIdString);
             var homework = await _HomeworkService.CreateHomeworkAsync(userId, classroomId, createDto);
             return CreatedAtAction(nameof(CreateHomework), new { classroomId }, homework);
+        }
+
+          [Authorize(Roles = "Professor")]
+        [HttpPost("submissions/{submissionId}/grade")]
+        public async Task<IActionResult> GradeSubmission(long submissionId, [FromBody] Dtos.Grade.CreateGradeDto createDto)
+        {
+            _logger.LogInformation("Professor grading submission {SubmissionId}", submissionId);
+            var grade = await _GradeService.CreateGradeAsync(submissionId, createDto);
+            return CreatedAtAction(nameof(GradeSubmission), new { submissionId }, grade);
         }
 
         [Authorize(Roles = "Professor, Student")]
