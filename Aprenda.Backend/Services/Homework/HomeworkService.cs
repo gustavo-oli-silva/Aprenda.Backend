@@ -20,6 +20,8 @@ public class HomeworkService : IHomeworkService
 
     private readonly IArchiveRepository _ArchiveRepository;
 
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
     public HomeworkService(IHomeworkRepository HomeworkRepository, IUserRepository userRepository, IClassroomRepository classroomRepository, IArchiveRepository archiveRepository)
     {
         _HomeworkRepository = HomeworkRepository;
@@ -69,7 +71,7 @@ public class HomeworkService : IHomeworkService
         HomeworkEntity.ClassroomId = classroom.Id;
         HomeworkEntity.CreatedAt = DateTime.UtcNow;
         await _HomeworkRepository.AddAsync(HomeworkEntity);
-        return HomeworkEntity.ToDto();
+        return HomeworkEntity.ToDto(_httpContextAccessor);
     }
 
     public async Task DeleteHomeworkAsync(long id)
@@ -96,18 +98,18 @@ public class HomeworkService : IHomeworkService
     public async Task<IEnumerable<HomeworkDto>> GetAllHomeworksAsync()
     {
         var Homeworks = await _HomeworkRepository.GetAllAsync();
-        return Homeworks.Select(c => c.ToDto());
+        return Homeworks.Select(c => c.ToDto(_httpContextAccessor));
     }
 
     public async Task<IEnumerable<HomeworkDto>> GetAllHomeworksByClassroomIdAsync(long classroomId)
     {
         var Homeworks = await _HomeworkRepository.GetHomeworksByClassroomIdAsync(classroomId);
-        return Homeworks.Select(c => c.ToDto());
+        return Homeworks.Select(c => c.ToDto(_httpContextAccessor));
     }
 
     public async Task<HomeworkDto> GetHomeworkByIdAsync(long id)
     {
-        return await _HomeworkRepository.GetByIdAsync(id) is Models.Homework Homework ? Homework.ToDto() : throw new KeyNotFoundException("Homework not found");
+        return await _HomeworkRepository.GetByIdAsync(id) is Models.Homework Homework ? Homework.ToDto(_httpContextAccessor) : throw new KeyNotFoundException("Homework not found");
     }
 
     public async Task UpdateHomeworkAsync(long userId, long idHomework, CreateHomeworkDto Homework)

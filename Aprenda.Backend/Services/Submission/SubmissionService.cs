@@ -20,12 +20,15 @@ public class SubmissionService : ISubmissionService
 
     private readonly IArchiveRepository _ArchiveRepository;
 
-    public SubmissionService(ISubmissionRepository SubmissionRepository, IUserRepository userRepository, IHomeworkRepository HomeworkRepository, IArchiveRepository archiveRepository)
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public SubmissionService(ISubmissionRepository SubmissionRepository, IUserRepository userRepository, IHomeworkRepository HomeworkRepository, IArchiveRepository archiveRepository, IHttpContextAccessor httpContextAccessor)
     {
         _SubmissionRepository = SubmissionRepository;
         _UserRepository = userRepository;
         _HomeworkRepository = HomeworkRepository;
         _ArchiveRepository = archiveRepository;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<SubmissionDto> CreateSubmissionAsync(long userId, long homeworkId, CreateSubmissionDto Submission)
@@ -70,7 +73,7 @@ public class SubmissionService : ISubmissionService
         SubmissionEntity.HomeworkId = homework.Id;
         SubmissionEntity.SubmittedAt = DateTime.UtcNow;
         await _SubmissionRepository.AddAsync(SubmissionEntity);
-        return SubmissionEntity.ToDto();
+        return SubmissionEntity.ToDto(_httpContextAccessor);
     }
 
 
@@ -94,7 +97,7 @@ public class SubmissionService : ISubmissionService
     public async Task<IEnumerable<SubmissionDto>> GetAllSubmissionsAsync()
     {
         var Submissions = await _SubmissionRepository.GetAllAsync();
-        return Submissions.Select(c => c.ToDto());
+        return Submissions.Select(c => c.ToDto(_httpContextAccessor));
     }
 
 
@@ -106,12 +109,18 @@ public class SubmissionService : ISubmissionService
             throw new KeyNotFoundException("User not found or is not a student");
         }
         var submissions = await _SubmissionRepository.GetAllSubmissionsByHomeworkIdAsync(userId, homeworkId);
-        return submissions.Select(c => c.ToDto());
+        return submissions.Select(c => c.ToDto(_httpContextAccessor));
+    }
+
+    public async Task<IEnumerable<SubmissionDto>> GetAllSubmissionsByHomeworkIdAsync(long homeworkId)
+    {
+        var submissions = await _SubmissionRepository.GetAllSubmissionsByHomeworkIdAsync(homeworkId);
+        return submissions.Select(c => c.ToDto(_httpContextAccessor));
     }
 
     public async Task<SubmissionDto> GetSubmissionByIdAsync(long id)
     {
-        return await _SubmissionRepository.GetByIdAsync(id) is Models.Submission submission ? submission.ToDto() : throw new KeyNotFoundException("Submission not found");
+        return await _SubmissionRepository.GetByIdAsync(id) is Models.Submission submission ? submission.ToDto(_httpContextAccessor) : throw new KeyNotFoundException("Submission not found");
     }
 
     public async Task UpdateSubmissionAsync(long userId, long idSubmission, CreateSubmissionDto submission)

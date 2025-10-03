@@ -1,17 +1,22 @@
 using System;
 using Aprenda.Backend.Dtos.Submission;
 using Aprenda.Backend.Mappers.User;
+using Aprenda.Backend.Mappers.Archive; // Add this using
+using Microsoft.AspNetCore.Http;       // Add this using
+using System.Linq;
 
 namespace Aprenda.Backend.Mappers.Submission;
 
 public static class SubmissionMapper
 {
-    public static SubmissionDto ToDto(this Models.Submission Submission) =>
+    public static SubmissionDto ToDto(this Models.Submission submission, IHttpContextAccessor httpContextAccessor) =>
         new SubmissionDto(
-            Submission.Id,
-            UserMapper.ToDto(Submission.User),
-            Submission.HomeworkId,
-            Submission.Status
+            submission.Id,
+            submission.User.ToDto(),
+            submission.HomeworkId,
+            submission.Status,
+            submission.Archives.Select(a => a.ToDto(httpContextAccessor)) ,
+            submission.SubmittedAt
         );
 
 

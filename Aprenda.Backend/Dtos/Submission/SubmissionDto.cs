@@ -1,3 +1,4 @@
+using Aprenda.Backend.Dtos.Archive;
 using Aprenda.Backend.Dtos.User;
 using Aprenda.Backend.Models;
 
@@ -7,6 +8,8 @@ public record SubmissionDto(
     long Id,
     UserDto User,
     long HomeworkId,
-    ESubmissionStatus Status
+    ESubmissionStatus Status,
+    IEnumerable<ArchiveDto> Archives,
+    DateTime SubmittedAt
 );
 

@@ -113,14 +113,14 @@ namespace Aprenda.Backend.Controllers
             return NoContent();
         }
 
-        // [Authorize(Roles = "Professor")]
-        // [HttpGet("homeworks/{homeworkId}/submissions")]
-        // public async Task<IActionResult> GetAllSubmissionsByHomeworkId(long homeworkId)
-        // {
-        //     _logger.LogInformation("Professor retrieving submissions for homework {HomeworkId}", homeworkId);
-        //     var submissions = await _SubmissionService.GetAllSubmissionsByHomeworkIdAsync(homeworkId);
-        //     return Ok(submissions);
-        // }
+        [Authorize(Roles = "Professor")]
+        [HttpGet("homeworks/{homeworkId}/submissions")]
+        public async Task<IActionResult> GetAllSubmissionsByHomeworkId(long homeworkId)
+        {
+            _logger.LogInformation("Professor retrieving submissions for homework {HomeworkId}", homeworkId);
+            var submissions = await _SubmissionService.GetAllSubmissionsByHomeworkIdAsync(homeworkId);
+            return Ok(submissions);
+        }
 
 
         [Authorize(Roles = "Professor")]

@@ -7,7 +7,7 @@ namespace Aprenda.Backend.Mappers.Homework;
 
 public static class HomeworkMapper
 {
-    public static HomeworkDto ToDto(this Models.Homework Homework) =>
+    public static HomeworkDto ToDto(this Models.Homework Homework, IHttpContextAccessor httpContextAccessor) =>
         new HomeworkDto(
             Homework.Id,
             Homework.Title,
@@ -16,7 +16,7 @@ public static class HomeworkMapper
             UserMapper.ToDto(Homework.User),
             Homework.ClassroomId,
             Homework.DueDate,
-            Homework.Submissions.Select(s => s.ToDto()) 
+            Homework.Submissions.Select(s => s.ToDto(httpContextAccessor))
         );
 
 
