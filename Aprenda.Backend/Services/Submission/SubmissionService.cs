@@ -46,14 +46,17 @@ public class SubmissionService : ISubmissionService
             throw new KeyNotFoundException("Homework not found");
         }
 
-       
+
 
         var SubmissionEntity = SubmissionMapper.ToDomain(Submission);
 
-         var dueDateUtc = DateTime.SpecifyKind(homework.DueDate.Value, DateTimeKind.Utc);
-        if (DateTime.UtcNow > dueDateUtc)
+        if (homework.DueDate.HasValue)
         {
-            SubmissionEntity.Status = ESubmissionStatus.Overdue;
+            var dueDateUtc = DateTime.SpecifyKind(homework.DueDate.Value, DateTimeKind.Utc);
+            if (DateTime.UtcNow > dueDateUtc)
+            {
+                SubmissionEntity.Status = ESubmissionStatus.Overdue;
+            }
         }
 
 
@@ -128,7 +131,7 @@ public class SubmissionService : ISubmissionService
 
     public async Task UpdateStatusAsync(long id, ESubmissionStatus status)
     {
-       var submission = await _SubmissionRepository.GetByIdAsync(id) ?? throw new KeyNotFoundException("Submission not found");
+        var submission = await _SubmissionRepository.GetByIdAsync(id) ?? throw new KeyNotFoundException("Submission not found");
         submission.Status = status;
         await _SubmissionRepository.UpdateAsync(submission);
     }

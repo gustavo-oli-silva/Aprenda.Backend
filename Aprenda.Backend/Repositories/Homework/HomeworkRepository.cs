@@ -47,6 +47,6 @@ public class HomeworkRepository : IHomeworkRepository
 
     public async Task<IEnumerable<Models.Homework>> GetHomeworksByClassroomIdAsync(long idClassroom)
     {
-        return await _dbContext.Homeworks.Include(p => p.User).Where(p => p.ClassroomId == idClassroom).ToListAsync();
+        return await _dbContext.Homeworks.Include(p => p.User).Where(p => p.ClassroomId == idClassroom).OrderByDescending(p => p.CreatedAt).ToListAsync();
     }
 }

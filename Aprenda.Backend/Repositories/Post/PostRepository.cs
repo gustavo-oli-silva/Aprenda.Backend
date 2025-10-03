@@ -51,7 +51,8 @@ public class PostRepository : IPostRepository
         .Include(p => p.Archives)
         .Where(p => p.ClassroomId == idClassroom)
         .OfType<Models.Post>()
-        .Where(p => !(p is Models.Homework)) 
+        .Where(p => !(p is Models.Homework))
+        .OrderByDescending(p => p.CreatedAt) 
         .ToListAsync();
     }
 }
