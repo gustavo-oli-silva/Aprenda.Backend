@@ -15,7 +15,8 @@ public static class PostMapper
             Post.IsFixed,
             UserMapper.ToDto(Post.User),
             Post.ClassroomId,
-            Post.Archives.Select(a => a.ToDto(httpContextAccessor))
+            Post.Archives.Select(a => a.ToDto(httpContextAccessor)),
+            Post.CreatedAt
         );
 
 

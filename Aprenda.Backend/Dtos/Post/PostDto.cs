@@ -10,6 +10,7 @@ public record PostDto(
     bool IsFixed,
     UserDto User,
     long ClassroomId,
-    IEnumerable<ArchiveDto> Archives
+    IEnumerable<ArchiveDto> Archives,
+    DateTime CreatedAt
 );
 

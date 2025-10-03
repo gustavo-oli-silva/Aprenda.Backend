@@ -11,6 +11,7 @@ public record HomeworkDto(
     UserDto User,
     long ClassroomId,
     DateTime? DueDate,
+    DateTime CreatedAt,
     IEnumerable<SubmissionDto> Submissions
 );
 

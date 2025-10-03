@@ -45,14 +45,16 @@ public class SubmissionService : ISubmissionService
             throw new KeyNotFoundException("Homework not found");
         }
 
-        var dueDateUtc = DateTime.SpecifyKind(homework.DueDate.Value, DateTimeKind.Utc);
-        if (DateTime.UtcNow > dueDateUtc)
-        {
-            throw new Exception("The deadline for submitting this homework has already passed.");
-        }
-
+       
 
         var SubmissionEntity = SubmissionMapper.ToDomain(Submission);
+
+         var dueDateUtc = DateTime.SpecifyKind(homework.DueDate.Value, DateTimeKind.Utc);
+        if (DateTime.UtcNow > dueDateUtc)
+        {
+            SubmissionEntity.Status = ESubmissionStatus.Overdue;
+        }
+
 
         if (Submission.AttachmentIds != null && Submission.AttachmentIds.Any())
         {
@@ -109,13 +111,13 @@ public class SubmissionService : ISubmissionService
             throw new KeyNotFoundException("User not found or is not a student");
         }
         var submissions = await _SubmissionRepository.GetAllSubmissionsByHomeworkIdAsync(userId, homeworkId);
-        return submissions.Select(c => c.ToDto(_httpContextAccessor));
+        return submissions.Select(c => c.ToDto(_httpContextAccessor)).OrderByDescending(s => s.SubmittedAt);
     }
 
     public async Task<IEnumerable<SubmissionDto>> GetAllSubmissionsByHomeworkIdAsync(long homeworkId)
     {
         var submissions = await _SubmissionRepository.GetAllSubmissionsByHomeworkIdAsync(homeworkId);
-        return submissions.Select(c => c.ToDto(_httpContextAccessor));
+        return submissions.Select(c => c.ToDto(_httpContextAccessor)).OrderByDescending(s => s.SubmittedAt);
     }
 
     public async Task<SubmissionDto> GetSubmissionByIdAsync(long id)

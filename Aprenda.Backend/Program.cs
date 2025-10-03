@@ -106,10 +106,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        // Esta é a linha mais importante.
-        // Ela diz ao ASP.NET para usar camelCase ao serializar/desserializar JSON.
-        // Assim, ele vai mapear "attachmentsIds" do JSON para "AttachmentIds" no C#.
         options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.JsonSerializerOptions.Converters.Add(new JsonDateTimeConverter());
     });
 
 builder.Services.AddRouting(options =>

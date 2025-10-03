@@ -16,6 +16,7 @@ public static class HomeworkMapper
             UserMapper.ToDto(Homework.User),
             Homework.ClassroomId,
             Homework.DueDate,
+            Homework.CreatedAt,
             Homework.Submissions.Select(s => s.ToDto(httpContextAccessor))
         );
 
